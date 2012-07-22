@@ -14529,7 +14529,7 @@ StateHandler.prototype = {
 
         var bufferObj = {
             bufferToUse: bufferToUse,
-            symbolicName: symbolicName,
+            symbolicName: symbolicName
         };
 
         if (e) {
