@@ -21,15 +21,18 @@ function highlight(text, mode, theme) {
     }
     
     function createToken(obj) {
-        if(obj.type === 'text') return document.createTextNode(obj.value);
         var token = document.createElement('span');
-        token.setAttribute('class', obj.type.split('.').map(function(v){return 'ace_' + v}).join(' '));
-        token.innerHTML = escapeHTML(obj.value);
+        if(obj.type === 'text') {
+            return document.createTextNode(obj.value);
+        } else {
+            token.setAttribute('class', obj.type.split('.').map(function(v){return 'ace_' + v}).join(' '));
+            token.innerHTML = escapeHTML(obj.value);
+        }
         return token;
     }
     
     function escapeHTML(s) {
-        return s.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/  /g, '&nbsp;&nbsp;');
+        return s.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/  /g, '&#160;&#160;');
     }
     
     //create a dummy element and set to editor.

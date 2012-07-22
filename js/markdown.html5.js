@@ -38,18 +38,15 @@ markdown.highlightCode = function(tree, theme) {
             result = ['ol', {'class': theme + ' source-code'}],
             editor;
             
-        function createLine() {
-            return ['li', {'class': 'ace_line'}];
-        }
         
-        function createToken(obj) {
+        var createToken = function (obj) {
             if(obj.type === 'text') return ['span', obj.value];
             return [
                 'span',
-                {'class': obj.type.split('.').map(function(v){return 'ace_' + v}).join(' ')},
+                {'class': obj.type.split('.').map(function(v){return 'ace_' + v;}).join(' ')},
                 obj.value
             ];
-        }
+        };
         
         dummy.textContent = code;
         editor = ace.edit(dummy);
@@ -59,7 +56,7 @@ markdown.highlightCode = function(tree, theme) {
         }
         
         lines.forEach(function(v) {
-            var line = createLine();
+            var line = ['li', {'class': 'ace_line'}];
             v.forEach(function(v) {
                 line.push(createToken(v));
             });
@@ -72,6 +69,49 @@ markdown.highlightCode = function(tree, theme) {
     for(var i = 0, n = tree.length; i < n; ++i) {
         if(Array.isArray(tree[i])) markdown.highlightCode(tree[i], theme);
     }
+
+};
+
+markdown.setIndices = function (tree, index) {
+    index = index || 0;
+
+    function _setIndices (tree) {
+        if (tree[0] === 'section') {
+            tree.splice(1, 0, {id: '' + index++});
+            tree.slice(2).forEach(_setIndices);
+        }
+    }
+
+    tree.forEach(_setIndices);
+
+    return index;
+};
+
+markdown.getNavigation = function (tree, path) {
     
-    
+
+    function buildList (title, id) {
+        var li = document.createElement('li'),
+            a = document.createElement('a');
+        a.href = path + '#' + id;
+        a.textContent = title;
+        li.appendChild(a);
+        return li;
+    }
+
+    function _getNavigation (tree) {
+        var nav = document.createElement('ol');
+
+        tree.forEach(function (v) {
+            if (v[0] === 'section') {
+                var li = buildList(v[2][1], v[1].id);
+                nav.appendChild(li);
+                li.appendChild(_getNavigation(v));
+            }
+        });
+
+        return nav.children.length ? nav : document.createTextNode('');
+    }
+
+    return _getNavigation(tree);
 };
