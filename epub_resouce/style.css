@@ -4,7 +4,7 @@ ul, ol {
     padding: 0 0 0 1em;
 }
 
-pre, code, blockquote {
+pre, code {
     border: 1px solid #ddd;
     border-radius: 2px;
     background-color: #f9f9fa;
@@ -24,24 +24,11 @@ p {
     text-indent: 1em;
 }
 blockquote {
-margin: 1em;
-padding: 1em;
-}
-blockquote:before {
-content: '“';
-font-size: 8em;
-position: absolute;
-top: 0.6em;
-left: 0.3em;
-opacity: 0.2;
-}
-blockquote:after {
-content: '”';
-font-size: 8em;
-position: absolute;
-right: 0.3em;
-bottom: 0.5em;
-opacity: 0.2;
+margin: 1em 0;
+padding: 0.5em 1em;
+border-left: 0.5em solid rgba(0, 0, 0, 0.1);
+background-color: rgba(0, 0, 0, 0.04);
+color: #111;
 }
 
 section > h1 {
